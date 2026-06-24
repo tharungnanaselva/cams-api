@@ -14,6 +14,20 @@ class AllocationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'room' => [
+                'id' => $this->room->id,
+                'room_number' => $this->room->room_number,
+                'building' => $this->room->building?->name
+            ],
+            'occupant' => [
+                'id' => $this->occupant->id,
+                'name' => $this->occupant->name,
+                'gender' => $this->occupant->gender
+            ],
+            'allocated_at' => $this->allocated_at,
+            'status' => $this->status
+        ];
     }
 }

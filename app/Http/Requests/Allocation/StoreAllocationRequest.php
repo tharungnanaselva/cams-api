@@ -12,7 +12,7 @@ class StoreAllocationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,15 @@ class StoreAllocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'room_id' => [
+                'required',
+                'exists:rooms,id'
+            ],
+
+            'occupant_id' => [
+                'required',
+                'exists:occupants,id'
+            ]
         ];
     }
 }

@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('allocations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('room_id');
+            $table->foreignId('occupant_id');
+            $table->timestamp('allocated_at');
+            $table->enum('status', [
+                'active',
+                'transferred',
+                'cancelled'
+            ])->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

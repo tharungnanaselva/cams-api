@@ -22,4 +22,9 @@ class Room extends Model
     {
         return $this->belongsTo(Building::class);
     }
+
+    public function allocations()
+    {
+        return $this->hasMany(Allocation::class);
+    }
 }
