@@ -17,8 +17,15 @@ class BuildingResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type,
-            'gender_restriction' => $this->gender_restriction,
+            'type' => [
+                'value' => $this->type,
+                'label' => ucwords(str_replace('_', ' ', $this->type)),
+            ],
+
+            'gender_restriction' => [
+                'value' => $this->gender_restriction,
+                'label' => ucwords($this->gender_restriction),
+            ],
             'status' => $this->status,
             'created_at' => $this->created_at,
         ];
