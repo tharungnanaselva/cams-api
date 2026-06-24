@@ -31,7 +31,7 @@ class UpdateBuildingRequest extends FormRequest
 
             'type' => [
                 'sometimes',
-                'in:student_hostel,guest_house,employee_housing'
+                'in:student_hostel,guest_house,employee_quarters'
             ],
 
             'gender_restriction' => [
