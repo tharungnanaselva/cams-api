@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Building;
+namespace App\Http\Requests\Occupant;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateBuildingRequest extends FormRequest
+class UpdateOccupantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,25 +24,42 @@ class UpdateBuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
+
             'name' => [
                 'sometimes',
                 'string',
                 'max:255'
             ],
 
-            'type' => [
+            'email' => [
                 'sometimes',
-                'in:student_hostel,guest_house,employee_housing'
+                'email',
+                Rule::unique('occupants')
+                    ->ignore(
+                        $this->route('occupant')->id
+                    )
             ],
 
-            'gender_restriction' => [
+            'phone' => [
                 'sometimes',
-                'in:male,female,mixed'
+                'string',
+                'max:20'
             ],
 
-            'status' => [
+            'gender' => [
                 'sometimes',
-                'boolean'
+                'in:male,female'
+            ],
+
+            'occupant_type' => [
+                'sometimes',
+                'in:student,employee,guest'
+            ],
+
+            'department' => [
+                'nullable',
+                'string',
+                'max:255'
             ]
         ];
     }

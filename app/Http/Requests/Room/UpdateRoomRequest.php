@@ -12,7 +12,7 @@ class UpdateRoomRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,31 @@ class UpdateRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'building_id' => [
+                'sometimes',
+                'exists:buildings,id'
+            ],
+
+            'room_number' => [
+                'sometimes',
+                'string',
+                'max:50'
+            ],
+
+            'room_type' => [
+                'sometimes',
+                'in:single,double,triple,four'
+            ],
+
+            'gender_restriction' => [
+                'sometimes',
+                'in:male,female,mixed'
+            ],
+
+            'status' => [
+                'sometimes',
+                'in:available,occupied,reserved,blocked,maintenance'
+            ]
         ];
     }
 }

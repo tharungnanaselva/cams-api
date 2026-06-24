@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Room;
+namespace App\Http\Controllers\Api\v1\Occupant;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Room\StoreRoomRequest;
-use App\Http\Requests\Room\UpdateRoomRequest;
-use App\Http\Resources\RoomResource;
-use App\Models\Room;
+use App\Http\Requests\Occupant\StoreOccupantRequest;
+use App\Http\Requests\Occupant\UpdateOccupantRequest;
+use App\Http\Resources\OccupantResource;
+use App\Models\Occupant;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class OccupantController extends Controller
 {
     use ApiResponse;
     /**
@@ -19,15 +19,15 @@ class RoomController extends Controller
     public function index()
     {
         try {
-            $rooms = Room::latest()->paginate(10);
+            $occupants = Occupant::latest()->paginate(10);
 
             return $this->successResponse(
-                RoomResource::collection($rooms),
-                'Rooms fetched successfully'
+                OccupantResource::collection($occupants),
+                'Occupants fetched successfully'
             );
         } catch (\Throwable $th) {
             return $this->errorResponse(
-                'Failed to fetch rooms',
+                'Failed to fetch occupants',
                 $th->getMessage(),
                 500
             );
@@ -37,30 +37,20 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoomRequest $request)
+    public function store(StoreOccupantRequest $request)
     {
         try {
-
-            $capacityMap = [
-                'single' => 1,
-                'double' => 2,
-                'triple' => 3,
-                'four' => 4
-            ];
-
             $data = $request->validated();
-
-            $data['capacity'] = $capacityMap[$data['room_type']];
-            $room = Room::create($data);
+            $occupant = Occupant::create($data);
 
             return $this->successResponse(
-                new RoomResource($room),
-                'Room created successfully',
+                new OccupantResource($occupant),
+                'Occupant created successfully',
                 201
             );
         } catch (\Throwable $th) {
             return $this->errorResponse(
-                'Failed to create room',
+                'Failed to create occupant',
                 $th->getMessage(),
                 500
             );
@@ -70,16 +60,16 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
+    public function show(Occupant $occupant)
     {
         try {
             return $this->successResponse(
-                new RoomResource($room),
-                'Room details fetched'
+                new OccupantResource($occupant),
+                'Occupant details fetched'
             );
         } catch (\Throwable $th) {
             return $this->errorResponse(
-                'Failed to fetch room details',
+                'Failed to fetch occupant details',
                 $th->getMessage(),
                 500
             );
@@ -89,32 +79,20 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoomRequest $request, Room $room)
+    public function update(UpdateOccupantRequest $request, Occupant $occupant)
     {
         try {
             $data = $request->validated();
 
-            if (isset($data['room_type'])) {
-
-                $capacityMap = [
-                    'single' => 1,
-                    'double' => 2,
-                    'triple' => 3,
-                    'four' => 4
-                ];
-
-                $data['capacity'] = $capacityMap[$data['room_type']];
-            }
-
-            $room->update($data);
+            $occupant->update($data);
 
             return $this->successResponse(
-                new RoomResource($room),
-                'Room updated successfully'
+                new OccupantResource($occupant),
+                'Occupant updated successfully'
             );
         } catch (\Throwable $th) {
             return $this->errorResponse(
-                'Failed to update room',
+                'Failed to update occupant',
                 $th->getMessage(),
                 500
             );
@@ -124,18 +102,18 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy(Occupant $occupant)
     {
         try {
-            $room->delete();
+            $occupant->delete();
 
             return $this->successResponse(
                 null,
-                'Room deleted successfully'
+                'Occupant deleted successfully'
             );
         } catch (\Throwable $th) {
             return $this->errorResponse(
-                'Failed to delete room',
+                'Failed to delete occupant',
                 $th->getMessage(),
                 500
             );

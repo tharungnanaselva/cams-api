@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Room;
+namespace App\Http\Requests\Occupant;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoomRequest extends FormRequest
+class StoreOccupantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,31 +23,38 @@ class StoreRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'building_id' => [
+            'name' => [
                 'required',
-                'exists:buildings,id'
+                'string',
+                'max:255'
             ],
-            'room_number' => [
+
+            'email' => [
                 'required',
-                'max:50'
+                'email',
+                'unique:occupants,email'
             ],
-            'room_type' => [
+
+            'phone' => [
                 'required',
-                'in:single,double,triple,four'
+                'string',
+                'max:20'
             ],
-            'capacity' => [
+
+            'gender' => [
                 'required',
-                'integer',
-                'min:1',
-                'max:4'
+                'in:male,female'
             ],
-            'gender_restriction' => [
+
+            'occupant_type' => [
                 'required',
-                'in:male,female,mixed'
+                'in:student,employee,guest'
             ],
-            'status' => [
-                'required',
-                'in:available,occupied,reserved,blocked,maintenance'
+
+            'department' => [
+                'nullable',
+                'string',
+                'max:255'
             ]
         ];
     }
