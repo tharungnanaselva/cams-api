@@ -99,34 +99,72 @@ class AllocationController extends Controller
 
     public function update(UpdateAllocationRequest $request, Allocation $allocation, AllocationService $allocationService)
     {
-        $room = Room::findOrFail(
-            $request->room_id
-        );
+        try {
+            $room = Room::findOrFail(
+                $request->room_id
+            );
 
-        $allocation = $allocationService->transfer($allocation, $room);
+            $allocation = $allocationService->transfer($allocation, $room);
 
-        return $this->successResponse(
-            new AllocationResource(
-                $allocation
-            ),
-            'Allocation transferred successfully.'
-        );
+            return $this->successResponse(
+                new AllocationResource(
+                    $allocation
+                ),
+                'Allocation transferred successfully.'
+            );
+        } catch (\Throwable $th) {
+            return $this->errorResponse(
+                'Failed to transfer allocation',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 
     public function destroy(Allocation $allocation, AllocationService $allocationService)
     {
-        $allocation->update([
-            'status' => 'cancelled'
-        ]);
+        try {
+            $allocation->delete();
 
-        $allocationService
-            ->updateRoomStatus(
-                $allocation->room
+            $allocationService
+                ->updateRoomStatus(
+                    $allocation->room
+                );
+
+            return $this->successResponse(
+                null,
+                'Allocation cancelled successfully'
             );
+        } catch (\Throwable $th) {
+            return $this->errorResponse(
+                'Failed to cancel allocation',
+                $th->getMessage(),
+                500
+            );
+        }
+    }
 
-        return $this->successResponse(
-            null,
-            'Allocation cancelled successfully'
-        );
+    public function cancel(Allocation $allocation, AllocationService $allocationService)
+    {
+        try {
+            $allocation->status = 'cancelled';
+            $allocation->save();
+
+            $allocationService
+                ->updateRoomStatus(
+                    $allocation->room
+                );
+
+            return $this->successResponse(
+                null,
+                'Allocation cancelled successfully'
+            );
+        } catch (\Throwable $th) {
+            return $this->errorResponse(
+                'Failed to cancel allocation',
+                $th->getMessage(),
+                500
+            );
+        }
     }
 }

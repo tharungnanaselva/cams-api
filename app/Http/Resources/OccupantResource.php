@@ -19,8 +19,14 @@ class OccupantResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'gender' => $this->gender,
-            'occupant_type' => $this->occupant_type,
+            'gender' => [
+                'value' => $this->gender,
+                'label' => ucwords($this->gender),
+            ],
+            'occupant_type' => [
+                'value' => $this->occupant_type,
+                'label' => ucwords(str_replace('_', ' ', $this->occupant_type)),
+            ],
             'department' => $this->department,
         ];
     }

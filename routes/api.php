@@ -28,5 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::resource('/allocations', AllocationController::class);
     
+    Route::post('/allocations/{allocation}/cancel', [AllocationController::class, 'cancel']);
+    
     Route::post('/logout', [AuthController::class, 'logout']);
 });
